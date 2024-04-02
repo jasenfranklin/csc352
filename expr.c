@@ -30,6 +30,15 @@ Expr* get_next_expr_node(){
 List* get_all_expr_nodes(){
     // read expression from stdin return linked list of expr nodes
     // should call get next expr node until type end is found
+   struct List *head = NULL;
+   struct List *last;
+   struct List *enode;
+   last = &head;
+    while((enode=get_next_expr_node())!=NULL){
+        last->next = enode;
+        last = enode;
+    }
+    return head.next;
 }
 void print_expr_node(Expr* expr){
 
