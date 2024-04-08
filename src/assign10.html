@@ -1,0 +1,161 @@
+<p><link rel="stylesheet" href="https://unpkg.com/bamboo.css"></p>
+<h1
+id="programming-assignment-9-binary-coded-decimals-draft">Programming
+Assignment 9: Binary-Coded Decimals [DRAFT]</h1>
+<p>Version 1.0 (2024-03-31) - Initial version</p>
+<h2 id="due-date">Due Date:</h2>
+<ul>
+<li>Friday, 2024-04-12, 3:00PM Arizona Time</li>
+</ul>
+<h2 id="download-and-extract-the-assignments-files-from-d2l">Download
+and extract the assignments files from D2L</h2>
+<p>Download the file <code>distribution.tar.gz</code> from D2L and save
+it in your <code>csc352</code> directory.</p>
+<h2 id="create-a-directory-for-this-assignment-called-a10">Create a
+directory for this assignment called <code>a10</code></h2>
+<h2 id="general-idea">General Idea</h2>
+<p>Extremely large integers can be stored in binary-coded decimal (BCD)
+format. In BCD format, each digit of the number is stored separately.
+For example, the number 1234 would be stored as 1, 2, 3, and 4.</p>
+<p>In this assignment, you will write C code to read and process BCD
+numbers. In typical BCD implementations, each digit is stored in a 4-bit
+field. For example, the number 1234 would be stored as 0001, 0010, 0011,
+and 0100. We will be doing something very, very different.</p>
+<p>Our C programs will be storing the digits in a linked list. Each node
+of the linked list will contain a single digit of the number. The least
+significant digit will be stored in the first node of the list, and the
+most significant digit will be stored in the last node of the list.</p>
+<h2 id="write-c-programs">Write C Program(s):</h2>
+<p>For this assignment, you will write one C file, which will be used by
+three different C programs.</p>
+<p>All programs will read input from standard input (stdin) and write
+output to standard output (stdout).</p>
+<p>The programs should only use only the following library routines:</p>
+<ul>
+<li><code>isdigit()</code></li>
+<li><code>strlen()</code></li>
+<li><code>malloc()</code></li>
+<li><code>scanf()</code></li>
+<li><code>free()</code></li>
+</ul>
+<p><strong>Do not use any other library functions.</strong></p>
+<h3 id="provided-files-bcd.h-read.c-sum.c-scale.c">Provided files: bcd.h
+read.c sum.c scale.c</h3>
+<p>You are provided with the following files, which you should not
+modify:</p>
+<ul>
+<li><code>bcd.h</code> - This file contains the following definitions:
+<ul>
+<li>the <code>BCD</code> struct</li>
+<li>the <code>Digit</code> struct, for a linked list of
+<code>Digit</code> nodes</li>
+<li>the function prototypes for the functions you will implement.</li>
+</ul></li>
+<li><code>read.c</code> - This file contains a main function that will
+read integers, check that the structs are well-formed, convert them back
+to integers, and print them.</li>
+<li><code>sum.c</code> - This file contains a main function that read a
+list of integers and sum them, printing intermediate results.</li>
+<li><code>scale.c</code> - This file contains a main function that reads
+a list of integers, scales them by integer scalars, and prints the
+results.</li>
+</ul>
+<p>DO NOT MODIFY THESE FILES.</p>
+<h3 id="bcd.h">bcd.h</h3>
+<p>The <code>bcd.h</code> file contains the following definitions:</p>
+<pre><code>typedef struct digit {
+  int digit;
+  struct digit* next_higher_digit;
+} Digit;
+
+typedef struct bcd {
+  Digit* least_significant_digit;
+} BCD;</code></pre>
+<p>Finally, your program will need to implement 6 (of these 7)
+functions, which are prototyped in <code>bcd.h</code>:</p>
+<pre><code>extern int audit_digits(Digit *d);
+extern char *bcd_to_string(BCD *bcd);
+extern BCD* read_bcd();
+
+extern BCD* zero();
+extern BCD* add_bcd(BCD* a, BCD* b);
+
+extern BCD* scale_bcd(BCD* a, int scale);
+
+extern BCD* multiply_bcd(BCD* a, BCD* b);</code></pre>
+<p>The first three are needed for <code>read.c</code>.</p>
+<p>The first five are needed for <code>sum.c</code>.</p>
+<p>The first six are needed for <code>scale.c</code>.</p>
+<p>You do not need to implement <code>multiply_bcd</code> for this
+assignment.</p>
+<p>I suggest you implement these functions in the order they are
+listed.</p>
+<h3
+id="int-audit_digitsdigit-d"><code>int audit_digits(Digit *d)</code></h3>
+<p>This function will take a pointer to a <code>Digit</code> node and
+return 1 if the <code>digit</code> field of the <code>Digit</code> node
+is between 0 and 9 (inclusive) and the <code>next_higher_digit</code>
+field is either <code>NULL</code> or a pointer to a correct
+<code>Digit</code> node. If the <code>digit</code> field is not between
+0 and 9 or the <code>next_higher_digit</code> field is not
+<code>NULL</code> or a pointer to a <code>Digit</code> node, then the
+function will return 0.</p>
+<h3
+id="char-bcd_to_stringbcd-bcd"><code>char *bcd_to_string(BCD *bcd)</code></h3>
+<p>This function will take a pointer to a <code>BCD</code> node and
+return a string that represents the number stored in the
+<code>BCD</code> node. The string should be dynamically allocated. The
+string should contain the digits of the number in order from most
+significant to least significant. For example, the number 1234 would be
+represented by the string “1234”.</p>
+<h3 id="bcd-read_bcd"><code>BCD* read_bcd()</code></h3>
+<p>This function will read a BCD number from standard input and return a
+pointer to a <code>BCD</code> node that represents that number. The
+number will be read as a string of digits. The most significant digit
+will be read first, and the least significant digit will be read
+last.</p>
+<p>The function will return <code>NULL</code> when there is not more
+input.</p>
+<h3 id="bcd-zero"><code>BCD* zero()</code></h3>
+<p>This function will return a pointer to a <code>BCD</code> node that
+represents the number 0.</p>
+<h3
+id="bcd-add_bcdbcd-a-bcd-b"><code>BCD* add_bcd(BCD* a, BCD* b)</code></h3>
+<p>This function will take two pointers to <code>BCD</code> nodes and
+return a pointer to a new <code>BCD</code> node that represents the sum
+of the two numbers. The <code>BCD</code> nodes <code>a</code> and
+<code>b</code> will not be modified. The new <code>BCD</code> node will
+be dynamically allocated.</p>
+<h3
+id="bcd-scale_bcdbcd-a-int-scale"><code>BCD* scale_bcd(BCD* a, int scale)</code></h3>
+<p>This function will take a pointer to a <code>BCD</code> node and an
+integer <code>scale</code> and return a pointer to a new
+<code>BCD</code> node that represents the number stored in the
+<code>BCD</code> node scaled by the integer <code>scale</code>. The
+<code>BCD</code> node <code>a</code> will not be modified. The new
+<code>BCD</code> node will be dynamically allocated.</p>
+<h3
+id="bcd-multiply_bcdbcd-a-bcd-b"><code>BCD* multiply_bcd(BCD* a, BCD* b)</code></h3>
+<p>This function will take two pointers to <code>BCD</code> nodes and
+return a pointer to a new <code>BCD</code> node that represents the
+product of the two numbers. The <code>BCD</code> nodes <code>a</code>
+and <code>b</code> will not be modified. The new <code>BCD</code> node
+will be dynamically allocated.</p>
+<p><code>multiply_bcd</code> is not needed for this assignment. You may
+stub it with a routine that simply returns <code>NULL</code>.</p>
+<h2 id="experiment-with-them">Experiment with them</h2>
+<p>Compile each program using a command like:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cc</span> <span class="at">-Wall</span> <span class="at">-o</span> read read.c bcd.c</span></code></pre></div>
+<p>There must be no warnings or errors. (Notice the addition of the
+<code>-Wall</code> flag!)</p>
+<p>Then, try it with file redirection, like:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./read</span> <span class="op">&lt;</span> ../distribution/assignment/a10/tests.read/t01_01.stdin</span></code></pre></div>
+<h2 id="run-the-test-cases">Run the test cases</h2>
+<p>Run the test cases using these commands as appropriate. E.g.,</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">../distribution/assignments/a9/test.sh</span> ./read ../distribution/assignments/a10/tests.read</span></code></pre></div>
+<p>If they don’t all pass, then you have a problem.</p>
+<h2 id="turn-it-in">Turn it in</h2>
+<p>Turn in all <code>bcd.c</code> to Gradescope for Assignment A9.</p>
